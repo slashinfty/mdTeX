@@ -221,7 +221,7 @@ async function compile() {
     if (result.stderr !== '') {
         console.error(result.stderr);
         document.querySelector('#error-text').innerHTML = result.stderr;
-        document.querySelector('#settings').setAttribute('open', '');
+        document.querySelector('#error').setAttribute('open', '');
     } else {
         const pdfArr = await readFile(pdfFile);
         const el = document.createElement('embed');
