@@ -223,6 +223,7 @@ async function compile() {
         document.querySelector('#error-text').innerHTML = result.stderr;
         document.querySelector('#error').setAttribute('open', '');
     } else {
+        document.querySelector('#pdf').innerHTML = '';
         const pdfArr = await readFile(pdfFile);
         const el = document.createElement('embed');
         el.src = URL.createObjectURL(new Blob([pdfArr], { type: 'application/pdf' }));
