@@ -107,7 +107,13 @@ async function loadButton() {
     const content = await readTextFile(path);
     Object.assign(text, defaults);
     text.body = content;
-    document.querySelector('#main-text').value = document.querySelector('#preamble-button').classList.contains('secondary') ? text.body : text.preamble;
+    editor.dispatch({
+        changes: {
+            from: 0,
+            to: editor.state.doc.length,
+            insert: document.querySelector('#preamble-button').classList.contains('secondary') ? text.body : text.preamble
+        }
+    });
     document.querySelector('#extensions').value = text.extensions;
 }
 
