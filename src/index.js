@@ -64,6 +64,7 @@ function newButton() {
         }
     });
     document.querySelector('#extensions').value = defaults.extensions;
+    document.querySelector('#pdf').innerHTML = '';
 }
 
 async function saveButton() {
@@ -115,6 +116,7 @@ async function loadButton() {
         }
     });
     document.querySelector('#extensions').value = text.extensions;
+    document.querySelector('#pdf').innerHTML = '';
 }
 
 function settingsButton() {
@@ -172,15 +174,6 @@ function bodyButton() {
     });
 }
 
-function textarea() {
-    const mainText = editor.state.doc.text.reduce((str, line) => `${str}\n${line}`, '').replace(/\n/, '');
-    if (document.querySelector('#body-button').classList.contains('secondary')) {
-        text.preamble = mainText;
-    } else {
-        text.body = mainText;
-    }
-}
-
 async function extensionsLink() {
     await openUrl('https://pandoc.org/MANUAL.html#extensions');
 }
@@ -218,12 +211,12 @@ async function compile() {
     const pdfFile = await resolve(path, `${fileName}.pdf`);
     const pandoc = Command.create('pandoc', ['--from', `markdown${text.extensions}`, '--to', document.querySelector('#export').value, '--output', pdfFile, yamlFile, markdownPath]);
     const result = await pandoc.execute();
+    document.querySelector('#pdf').innerHTML = '';
     if (result.stderr !== '') {
         console.error(result.stderr);
         document.querySelector('#error-text').innerHTML = result.stderr;
         document.querySelector('#error').setAttribute('open', '');
     } else {
-        document.querySelector('#pdf').innerHTML = '';
         const pdfArr = await readFile(pdfFile);
         const el = document.createElement('embed');
         el.src = URL.createObjectURL(new Blob([pdfArr], { type: 'application/pdf' }));
@@ -260,7 +253,22 @@ window.addEventListener('DOMContentLoaded', async () => {
                 ...closeBracketsKeymap,
                 ...defaultKeymap,
                 ...historyKeymap
-            ])
+            ]),
+            EditorView.updateListener.of(v => {
+                let newText;
+                if (v.state.doc.hasOwnProperty('text') && (!v.startState.doc.hasOwnProperty('text') || v.state.doc.text.toString() !== v.startState.doc.text.toString())) {
+                    newText = v.state.doc.text.join(`\n`);
+                }
+                if (v.state.doc.hasOwnProperty('children') && (!v.startState.doc.hasOwnProperty('children') || v.state.doc.children.reduce((str, child) => str + child.text.toString(), '') !== v.startState.doc.children.reduce((str, child) => str + child.text.toString(), ''))) {
+                    newText = v.state.doc.children.map(child => child.text).flat().join(`\n`);
+                }
+                if (newText === undefined) return;
+                if (document.querySelector('#body-button').classList.contains('secondary')) {
+                    text.preamble = newText;
+                } else {
+                    text.body = newText;
+                }
+            })
         ]
     });
     editor = new EditorView({
@@ -280,7 +288,6 @@ window.addEventListener('DOMContentLoaded', async () => {
     document.querySelector('#source-code-button').addEventListener('click', sourceCodeButton);
     document.querySelector('#preamble-button').addEventListener('click', preambleButton);
     document.querySelector('#body-button').addEventListener('click', bodyButton);
-    document.querySelector('.cm-content').addEventListener('input', textarea);
     document.querySelector('#extensions-link').addEventListener('click', extensionsLink);
     document.querySelector('#extensions').addEventListener('input', extensions);
     document.querySelector('#compile-button').addEventListener('click', compile);

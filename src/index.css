@@ -48,11 +48,20 @@ textarea, input {
     height: 100%;
 }
 
+.side {
+    overflow-x: scroll;
+}
+
 .right {
     justify-content: center;
 }
 
+.input {
+    anchor-name: --input;
+}
+
 .buttons {
+    anchor-name: --buttons;
     justify-content: space-between;
     flex-basis: content;
 }
@@ -75,6 +84,7 @@ textarea, input {
 
 .cm-editor {
     height: 100%;
+    width: 100%;
     border: var(--pico-border-width) solid var(--pico-form-element-border-color);
     border-radius: var(--pico-border-radius);
 }
@@ -88,12 +98,16 @@ textarea, input {
 }
 
 .cm-scroller {
-    overflow: auto;
+    overflow: scroll;
 }
 
 /* IDs */
 #textarea, #extensions {
     flex: 1;
+}
+
+#textarea {
+    max-height: 79vh;
 }
 
 #export {
