@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>mdTeX</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
+    <link rel="stylesheet" href="/src/index.css">
+  </head>
+  <body>
+    <main class="container-fluid">
+      <div class="side">
+        <div class="buttons">
+          <details class="dropdown" id="menu">
+            <summary>Menu</summary>
+            <ul>
+              <li id="new-button"><a href="#">New</a></li>
+              <li id="save-button"><a href="#">Save</a></li>
+              <li id="save-as-button"><a href="#">Save As</a></li>
+              <li id="load-button"><a href="#">Load</a></li>
+              <li id="settings-button"><a href="#">Settings</a></li>
+              <li id="source-code-button"><a href="#">Source Code</a></li>
+            </ul>
+          </details>
+          <div class="button-set">
+            <button class="secondary" id="preamble-button">Preamble</button>
+            <button id="body-button">Body</button>
+          </div>
+        </div>
+        <div id="textarea"></div>
+        <div class="input">
+          <label for="extensions"><a href="#" id="extensions-link">Extensions:</a></label>
+          <input type="text" id="extensions"/>
+          <select id="export" aria-label="Select">
+            <option value="pdf" selected>PDF</option>
+            <option value="beamer">Beamer</option>
+          </select>
+          <button class="contrast" id="compile-button">Compile</button>
+        </div>
+      </div>
+      <div class="right side">
+        <div id="pdf"></div>
+      </div>
+    </main>
+
+    <dialog id="settings">
+      <article>
+        <header>
+          <button aria-label="Close" rel="prev" id="close-settings-button"></button>
+          <h4>Settings</h4>
+        </header>
+        <div class="modal-body">
+          Default preamble:
+          <textarea class="settings-textarea" id="default-preamble-text"></textarea>
+          Default body:
+          <textarea class="settings-textarea" id="default-body-text"></textarea>
+          Default extensions:
+          <input type="text" id="default-extensions"/>
+        </div>
+        <footer>
+          <button id="save-settings-button">Save Settings</button>
+        </footer>
+      </article>
+    </dialog>
+
+    <dialog id="error">
+      <article>
+        <header>
+          <button aria-label="Close" rel="prev" id="close-error-button"></button>
+          <h4>Error</h4>
+        </header>
+        <p id="error-text"></p>
+      </article>
+    </dialog>
+
+    <script type="module" src="/src/index.js"></script>
+  </body>
+</html>

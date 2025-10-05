@@ -1,0 +1,24 @@
+{
+  "identifier": "desktop-capability",
+  "platforms": [
+    "macOS",
+    "windows",
+    "linux"
+  ],
+  "windows": [
+    "main"
+  ],
+  "permissions": [
+    "window-state:default",
+    {
+      "identifier": "shell:allow-execute",
+      "allow": [
+        {
+          "name": "pandoc",
+          "cmd": "pandoc",
+          "args": true
+        }
+      ]
+    }
+  ]
+}
